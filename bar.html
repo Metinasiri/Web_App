@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static/css/styles.css">
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <title>Diaper alert</title>
+  <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+  <script>
+  $(document).ready(function() {
+  var pusher = new Pusher('04baa22ea6e8b380ff7b', {
+    cluster: 'eu'
+  });
+  var patientName;
+  var channel = pusher.subscribe('my-channel');
+  channel.bind('my-event', function(data) {
+    console.log('Received data:', data);
+    console.log(data.patient_name, 'jai is here testing')
+    var alertClass = data.class;
+    var patientName = data.patient_name;
+    var message = data.message;
+    var columnClass = data.column;
+
+<style>
+    .sensor-container {
+      width: 300px;
+      height: 20px;
+      background-color: #f1f1f1;
+      border-radius: 10px;
+      position: relative;
+    }
+
+    .sensor-bar {
+      height: 100%;
+      border-radius: 10px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .yellow {
+      background-color: #ffd33d;
+    }
+
+    .green {
+      background-color: #8ac926;
+    }
+
+    .red {
+      background-color: #900;
+    }
+  </style>
+</head>
+<body>
+  <div class="sensor-container">
+    <div class="sensor-bar"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<!--	<script src="https://cdn.jsdelivr.net/npm/@pusher/pusher-js@7.0.3/dist/web/pusher.min.js"></script>-->
+	<script>
+	  // Connect to Pusher
+      var pusher = new Pusher('04baa22ea6e8b380ff7b', {
+      cluster: 'eu'
+      });
+      // Subscribe to the channel
+      var channel = pusher.subscribe('my-channel');
+
+      // Listen for events
+      channel.bind('diaper-change', function(data) {
+
+        const channel = pusher.subscribe("diaper-sensor");
+
+        channel.bind("update", (data) => {
+        const urinationLevel = data.urinationLevel;
+        sensorBar.style.width = `${urinationLevel}%`;
+        console.log(data)
+        if (urinationLevel >= 80) {
+          sensorBar.classList.remove("yellow", "green");
+          sensorBar.classList.add("red");
+        } else if (urinationLevel >= 50) {
+          sensorBar.classList.remove("yellow", "red");
+          sensorBar.classList.add("green");
+        } else {
+          sensorBar.classList.remove("green", "red");
+          sensorBar.classList.add("yellow");
+        }
+      });
+    </script>

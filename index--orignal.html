@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static/css/styles.css">
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <title>Diaper alert</title>
+  <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+<!--  <script>-->
+<!--    Pusher.logToConsole = true;-->
+<!--    // JavaScript code-->
+<!--    const redDiaperAlert = document.querySelector('.red .diaper-alert');-->
+<!--    const yellowDiaperAlert = document.querySelector('.yellow .diaper-alert');-->
+<!--    const greenDiaperAlert = document.querySelector('.green .diaper-alert');-->
+<!--    var pusher = new Pusher('04baa22ea6e8b380ff7b', {-->
+<!--    cluster: 'eu'-->
+<!--    });-->
+<!--    // Subscribe to the "diaper-alert" channel-->
+<!--    const channel = pusher.subscribe('my-channel');-->
+
+<!--  // Bind to the "update" event to update the diaper alert-->
+<!--    channel.bind('my-event', function(data) {-->
+<!--      const message = data.message;-->
+<!--      const alertClass = data.class;-->
+<!--      const columnClass = data.column;-->
+<!--      const diaperAlert = document.querySelector('.' + columnClass + ' .diaper-alert');-->
+<!--      if (diaperAlert) {-->
+<!--        diaperAlert.textContent = message;-->
+<!--        diaperAlert.className = 'diaper-alert ' + alertClass;-->
+<!--      } else {-->
+<!--        console.error('Diaper alert element not found for column class ' + columnClass);-->
+<!--        }-->
+
+<!--    // Update the diaper alert in the correct column-->
+<!--      switch (columnClass) {-->
+<!--        case 'red':-->
+<!--          redDiaperAlert.textContent = message;-->
+<!--          redDiaperAlert.classList.add(alertClass);-->
+<!--          break;-->
+<!--        case 'yellow':-->
+<!--          yellowDiaperAlert.textContent = message;-->
+<!--          yellowDiaperAlert.classList.add(alertClass);-->
+<!--          break;-->
+<!--        case 'green':-->
+<!--          greenDiaperAlert.textContent = message;-->
+<!--            greenDiaperAlert.classList.add(alertClass);-->
+<!--          break;-->
+<!--        default:-->
+<!--          break;-->
+<!--      }-->
+<!--    });-->
+<!--</script>-->
+<style>
+<!-- CSS code -->
+.container {
+  display: flex;
+}
+
+.col {
+  flex: 3;
+  padding: 1px;
+}
+
+.red {
+  background-color: red;
+  color: white;
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+.green {
+  background-color: green;
+  color: white;
+}
+
+.diaper-alert {
+  font-weight: bold;
+}
+
+.diaper-alert.urgent {
+  color: white;
+}
+</style>
+</head>
+<!--<body>-->
+<!-- HTML code -->
+<!--<div class="container">-->
+<!--  <div class="col red">-->
+<!--    <h2>Emergency</h2>-->
+<!--    <div class="diaper-alert"></div>-->
+<!--  </div>-->
+<!--  <div class="col yellow">-->
+<!--    <h2>Needs to be changed soon</h2>-->
+<!--    <div class="diaper-alert"></div>-->
+<!--  </div>-->
+<!--  <div class="col green">-->
+<!--    <h2>In good condition</h2>-->
+<!--    <div class="diaper-alert"></div>-->
+<!--  </div>-->
+<!--</div>-->
+
+  <script>
+
+<!--    // Enable pusher logging - don't include this in production-->
+<!--    Pusher.logToConsole = true;-->
+
+<!--    var pusher = new Pusher('04baa22ea6e8b380ff7b', {-->
+<!--      cluster: 'eu'-->
+<!--    });-->
+
+<!--    var channel = pusher.subscribe('my-channel');-->
+<!--    channel.bind('my-event', function(data) {-->
+<!--    alert(JSON.stringify(data))-->
+<!--    var patientName = data.message.patient_name;-->
+<!--    var urgency = data.message.urgency;-->
+<!--      // Create the HTML for the new diaper alert div-->
+<!--    var diaperAlert = '<div class="diaper-alert"><h5>' + urgency + '</h5>';-->
+
+<!--    //if (data.message.urgency === 'emergency') {-->
+<!--    // Find the emergency alert column and append the new patient data-->
+<!--      if (urgency === 'emergency') {-->
+<!--      console.log(patientName)-->
+<!--      console.log("it is also ok.")-->
+<!--      '<p class = "diaper-message">patientName</p>'-->
+<!--      diaperAlert += '<p class="diaper-message">Change the diaper immediately!</p></div>';-->
+<!--      $('.diaper-alert-column.red').append(diaperAlert);-->
+
+<!--&lt;!&ndash;      $('.diaper-alert-column.red').append(&ndash;&gt;-->
+<!--&lt;!&ndash;      '<div class="diaper-alert">' +&ndash;&gt;-->
+<!--&lt;!&ndash;      '<h3>' + data.message.urgency + '</h3>' +&ndash;&gt;-->
+<!--&lt;!&ndash;      '<p class="diaper-message">Change the diaper immediately!</p>' +&ndash;&gt;-->
+<!--&lt;!&ndash;      '</div>'&ndash;&gt;-->
+<!--&lt;!&ndash;    );&ndash;&gt;-->
+<!--    }-->
+<!--&lt;!&ndash;    } else if (data.message.urgency === 'soon') {&ndash;&gt;-->
+<!--&lt;!&ndash;    // Find the soon alert column and append the new patient data&ndash;&gt;-->
+<!--&lt;!&ndash;    $('.diaper-alert-column.green').append(&ndash;&gt;-->
+<!--&lt;!&ndash;      '<div class="diaper-alert">' +&ndash;&gt;-->
+<!--&lt;!&ndash;      '<h3>' + data.message.patient_name + '</h3>' +&ndash;&gt;-->
+<!--&lt;!&ndash;      '<p class="diaper-message">Diaper needs to be changed soon.</p>' +&ndash;&gt;-->
+<!--&lt;!&ndash;      '</div>'&ndash;&gt;-->
+<!--&lt;!&ndash;    );&ndash;&gt;-->
+<!--&lt;!&ndash;  } else {&ndash;&gt;-->
+<!--&lt;!&ndash;    // Find the clean alert column and append the new patient data&ndash;&gt;-->
+<!--&lt;!&ndash;    $('.diaper-alert-column.clean').append(&ndash;&gt;-->
+<!--&lt;!&ndash;      '<div class="diaper-alert">' +&ndash;&gt;-->
+<!--&lt;!&ndash;      '<h3>' + data.message.patient_name + '</h3>' +&ndash;&gt;-->
+<!--&lt;!&ndash;      '<p class="diaper-message">Everything is ok.</p>' +&ndash;&gt;-->
+<!--&lt;!&ndash;      '</div>'&ndash;&gt;-->
+<!--&lt;!&ndash;      );&ndash;&gt;-->
+<!--&lt;!&ndash;    }; }); &ndash;&gt;-->
+<!--  });-->
+    var pusher = new Pusher('04baa22ea6e8b380ff7b', {
+     cluster: 'eu'
+    });
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+    if (data.message.urgency === 'emergency') {
+      alert(JSON.stringify(data));
+      $('.diaper-alert').removeClass('green').addClass('red');
+      $('.diaper-message').text('Change the diaper immediately!');
+    } else if (data.message.urgency === 'soon') {
+      $('.diaper-alert').removeClass('red').addClass('green');
+      $('.diaper-message').text('Diaper needs to be changed soon.');
+    } else {
+      $('.diaper-alert').removeClass('red green');
+      $('.diaper-message').text('The diaper is clean.');
+    }
+  });
+  </script>
+<body>
+  <h1>Smart diaper alert</h1>
+  <p>
+    Update about patient diaper <code>my-channel</code>
+     <code>my-event</code>.
+  </p>
+  <div class="container">
+    <div class="alert diaper-alert" role="alert">
+      <span class="diaper-message"></span>
+    </div>
+  </div>
+
+<!--<div class="container-fluid">-->
+<!--  <div class="row">-->
+<!--    <div class="col-sm-4">-->
+<!--      &lt;!&ndash; Column 1 for emergency alerts &ndash;&gt;-->
+<!--      <div class="diaper-alert-column">-->
+<!--        <h3>Emergency Alerts</h3>-->
+<!--        <div class="diaper-alert emergency">-->
+<!--          <h5>Patient 1</h5>-->
+<!--          <p class="diaper-message">Change the diaper immediately!</p>-->
+<!--        </div>-->
+<!--        <div class="diaper-alert emergency">-->
+<!--          <h5>Patient 2</h5>-->
+<!--          <p class="diaper-message">Change the diaper immediately!</p>-->
+<!--        </div>-->
+<!--         Add more diaper-alert divs for emergency alerts -->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="col-sm-4">-->
+<!--      &lt;!&ndash; Column 2 for soon alerts &ndash;&gt;-->
+<!--      <div class="diaper-alert-column">-->
+<!--        <h3>Diaper Change Soon Alerts</h3>-->
+<!--        <div class="diaper-alert soon">-->
+<!--          <h5>Patient 3</h5>-->
+<!--          <p class="diaper-message">Diaper needs to be changed soon.</p>-->
+<!--        </div>-->
+<!--        <div class="diaper-alert soon">-->
+<!--          <h5>Patient 4</h5>-->
+<!--          <p class="diaper-message">Diaper needs to be changed soon.</p>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; Add more diaper-alert divs for soon alerts &ndash;&gt;-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="col-sm-4">-->
+<!--      &lt;!&ndash; Column 3 for clean alerts &ndash;&gt;-->
+<!--      <div class="diaper-alert-column">-->
+<!--        <h3>Clean Diaper Alerts</h3>-->
+<!--        <div class="diaper-alert">-->
+<!--          <h5>Patient 5</h5>-->
+<!--          <p class="diaper-message">The diaper is clean.</p>-->
+<!--        </div>-->
+<!--        <div class="diaper-alert">-->
+<!--          <h5>Patient 6</h5>-->
+<!--          <p class="diaper-message">The diaper is clean.</p>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; Add more diaper-alert divs for clean alerts &ndash;&gt;-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+</body>
+
+

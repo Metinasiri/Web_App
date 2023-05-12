@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.diaper-alert {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  margin: 20px;
+}
+
+.bar {
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.text {
+  color: #000;
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+.red {
+  background-color: #f44336;
+}
+
+.yellow {
+  background-color: #ff9800;
+}
+
+.green {
+  background-color: #ffff00;
+}
+</style>
+</head>
+<body>
+<div class="diaper-alert">
+  <div class="bar"></div>
+  <div class="text"></div>
+</div>
+<script>
+// Update the diaper alert with data from the server
+function updateDiaperAlert(data) {
+  const alert = document.querySelector('.diaper-alert');
+  const bar = alert.querySelector('.bar');
+  const text = alert.querySelector('.text');
+
+  switch (data.urgency) {
+    case 'emergency':
+      bar.classList.remove('yellow', 'green');
+      bar.classList.add('red');
+      text.textContent = 'Change diaper immediately!';
+      break;
+    case 'soon':
+      bar.classList.remove('red', 'green');
+      bar.classList.add('yellow');
+      text.textContent = 'Diaper change soon!';
+      break;
+    case 'not-urgent':
+      bar.classList.remove('red', 'yellow');
+      bar.classList.add('green');
+      text.textContent = 'Diaper change not urgent';
+      break;
+    default:
+      break;
+  }
+}
+
+// Get the diaper data from the server
+function getDiaperData() {
+  fetch('/diaper-data')
+    .then(response => response.json())
+    .then(data => updateDiaperAlert(data))
+    .catch(error => console.error(error));
+}
+
+// Call the getDiaperData function every 5 seconds to update the alert
+setInterval(getDiaperData, 5000);
+</script>
+</body>
+</html>

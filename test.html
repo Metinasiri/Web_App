@@ -1,0 +1,164 @@
+<html>
+    <head>
+        <script>
+        </script>
+        <style>
+        </style>
+    </head>
+    <body>
+    </body>
+</html>
+
+
+<!-- HTML code -->
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static/css/styles.css">
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <title>Diaper alert</title>
+  <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+  <script>
+$(document).ready(function() {
+  var pusher = new Pusher('04baa22ea6e8b380ff7b', {
+    cluster: 'eu'
+  });
+  var patientName;
+  var channel = pusher.subscribe('my-channel');
+  channel.bind('my-event', function(data) {
+    console.log('Received data:', data);
+    console.log(data.patient_name, 'jai is here testing')
+    var alertClass = data.class;
+    var patientName = data.patient_name;
+    var message = data.message;
+    var columnClass = data.column;
+
+    if (alertClass === 'urgent') {
+      console.log('Adding to emergency column');
+      $('.diaper-alert-column.red').append(
+        '<div class="diaper-alert ' + alertClass + '">' +
+        '<p class="diaper-message"> Patient Name: ' + patientName + '<br />' +
+        ' Alert message: ' + message + '</p>' +
+        '</div>'
+      );
+    } else if (alertClass === 'warning') {
+      console.log('Adding to soon column');
+      $('.diaper-alert-column.yellow').append(
+        '<div class="diaper-alert ' + alertClass + '">' +
+        '<p class="diaper-message"> Patient Name: ' + patientName + '<br />' +
+        ' Alert message: ' + message + '</p>' +
+        '</div>'
+      );
+    } else {
+      console.log('Adding to well-being column');
+      $('.diaper-alert-column.green').append(
+        '<div class="diaper-alert ' + alertClass + '">' +
+        '<p class="diaper-message"> Patient Name: ' + patientName + '<br />' +
+        ' Alert message: ' + message + '</p>' +
+        '</div>'
+      );
+    }
+  });
+});
+</script>
+	<style>
+		.diaper-alert-column {
+			border: 1px solid #ccc;
+			padding: 10px;
+			margin: 10px;
+			min-height: 150px;
+			border-radius: 5px;
+			background-color: #f8f8f8;
+		}
+		.diaper-alert {
+			border: 1px solid #ccc;
+			padding: 10px;
+			margin: 10px;
+			border-radius: 5px;
+			background-color: #fff;
+		}
+		.diaper-alert h5 {
+			margin-top: 0;
+		}
+		.diaper-alert .diaper-message {
+			margin-bottom: 0;
+		}
+		.diaper-alert-column.red {
+		.left{
+		background-color: white;
+  		width: 80%;
+		}
+		.right {
+  			background-color: red;
+  			width: 20%;
+		}
+		}
+		.diaper-alert-column.green {
+			background-color: #ccffcc;
+		}
+		.diaper-alert-column.yellow {
+			background-color: #ffffcc;
+		}
+	</style>
+</head>
+<body style="background-color:Grey;">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="left"></div>
+  			<div class="right"></div>
+			<div class="col-sm-4">
+				<h3>Emergency Alerts</h3>
+				<!-- Column 1 for emergency alerts -->
+				<div class="diaper-alert-column red">
+				</div>
+				<div class="diaper-alert-column red">
+				</div>
+
+			</div>
+			<div class="col-sm-4">
+				<!-- Column 2 for soon alerts -->
+				<div class="diaper-alert-column yellow">
+					<h3>Diaper Change Soon Alerts</h3>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<!-- Column 3 for clean alerts -->
+				<div class="diaper-alert-column green">
+					<h3>Clean Diaper Alerts</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<!--	<script src="https://cdn.jsdelivr.net/npm/@pusher/pusher-js@7.0.3/dist/web/pusher.min.js"></script>-->
+	<script>
+		// Connect to Pusher
+		var pusher = new Pusher('04baa22ea6e8b380ff7b', {
+        cluster: 'eu'
+        });
+
+		// Subscribe to the channel
+		var channel = pusher.subscribe('my-channel');
+
+		// Listen for events
+		channel.bind('diaper-change', function(data) {
+			// Create a new diaper
+			console.log(data)
+			var alertHtml = '<div class="diaper-alert"><h5>' + data.fullDocument.patient_name + '</h5><p class="diaper-message">' + data.message + '</p></div>';
+
+			// Append the new diaper alert to the appropriate column
+			if (data.urgency === 'emergency') {
+				$('.diaper-alert-column.red').append(alertHtml);
+			} else if (data.urgency === 'soon') {
+				$('.diaper-alert-column.yellow').append(alertHtml);
+			} else {
+				$('.diaper-alert-column.green').append(alertHtml);
+			}
+		});
+
+</script>
+</body>
+

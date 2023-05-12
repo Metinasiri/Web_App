@@ -1,0 +1,24 @@
+<script>
+    $(document).ready(function() {
+        // Subscribe to the Pusher channel for this patient's diaper alerts
+        var pusher = new Pusher('04baa22ea6e8b380ff7b', {
+            cluster:  'eu',
+            encrypted: true
+        });
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+
+
+        // Handle diaper threshold updates
+        channel.bind('diaper_threshold_updated', function(data) {
+            // refresh the diaper status display
+            updateDiaperStatus();
+        });
+
+        // Handle diaper alerts
+        channel.bind('diaper_alert', function(data) {
+            // display a popup or alert the user
+            alert JSON.jsonify(data)}
+
+
+</script>
