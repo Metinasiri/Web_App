@@ -18,43 +18,47 @@ pusher_client = pusher.Pusher(
     ssl=True,
 )
 
-
-#@app.route('/diaper-data')
-# def fetch_data():
-#     x = mycol.find_one()
-#     y = mycol.find()
-#     for data in y:
-#         print(data)
+from bson import json_util
 
 
-#fetch_data()
+@app.route('/diaper-data')
+def fetch_data():
+    x = mycol.find_one()
+    y = mycol.find({}, {"admission_date": "2023-05-28"})
+    # for j in mycol.find({},{ "admission_date": "2023-05-28"}):
+    #    print(j)
+    # print('jhhdsfkhjdfhjsdjfhdsgdsgfjkhgsdjfjsdfgjsdfj')
+    # for data in y:
+    #    print(data)
+
+
+# fetch_data()
 cursor = mycol.watch(full_document='updateLookup')
-print(cursor)
 for document in cursor:
-    print(document, 'document') # print for reference, 'document' for reference
+    print(document, 'document')  # print for reference, 'document' for reference
     if 'Volume' in document['fullDocument']:
         fullness = document['fullDocument']['Volume']
-        passedTime = document['fullDocument']['Passed Time']
-        batteryStatus = document['fullDocument']['Battery Status']
+        # passedTime = document['fullDocument']['Passed Time']
+        # batteryStatus = document['fullDocument']['BatteryStatus']
         # Determine the diaper alert level based on the fullness level
-        if fullness >= 90:
+        if fullness >= 400:
             patient_name = document['fullDocument']['Name']
             message = 'Urgent: change diaper now!'
             urine_volume = fullness
             Room = document['fullDocument']['Room']
-            changedDiaper = document['fullDocument']['Changed Diaper']
-            passedTime = passedTime
-            batteryStatus = batteryStatus
+            # changedDiaper = document['fullDocument']['Changed Diaper']
+            # passedTime = passedTime
+            # batteryStatus = batteryStatus
             alert_class = 'urgent'
             column_class = 'red'
-        elif fullness >= 60 < 90:
+        elif fullness >= 200 < 400:
             patient_name = document['fullDocument']['Name']
             message = 'Change diaper soon'
             urine_volume = fullness
             Room = document['fullDocument']['Room']
-            changedDiaper = document['fullDocument']['Changed Diaper']
-            passedTime = passedTime
-            batteryStatus = batteryStatus
+            # changedDiaper = document['fullDocument']['Changed Diaper']
+            # passedTime = passedTime
+            # batteryStatus = batteryStatus
             alert_class = 'warning'
             column_class = 'yellow'
         else:
@@ -62,25 +66,32 @@ for document in cursor:
             message = 'Diaper is okay'
             urine_volume = fullness
             Room = document['fullDocument']['Room']
-            changedDiaper = document['fullDocument']['Changed Diaper']
-            passedTime = passedTime
-            batteryStatus = batteryStatus
+            # changedDiaper = document['fullDocument']['Changed Diaper']
+            # passedTime = passedTime
+            # batteryStatus = batteryStatus
             alert_class = ''
             column_class = 'green'
 
         # Trigger a Pusher event to update the diaper alert in the browser
+        data = {
+        }
         pusher_client.trigger('my-channel', 'my-event', {
-            'id' : document['fullDocument']['_id'],
+            'id': document['fullDocument']['_id'],
             'Name': patient_name,
             'Volume': fullness,
             'message': message,
             'class': alert_class,
             'column': column_class,
             'Room': document['fullDocument']['Room'],
-            'ChangedDiaper': document['fullDocument']['Changed Diaper'],
-            'passedTime': passedTime,
-            'batteryStatus': batteryStatus,
+            #'ChangedDiaper': document['fullDocument']['Changed Diaper'],
+            #'passedTime': passedTime,
+            #'batteryStatus': batteryStatus,
         })
+                                                         # document['fullDocument']['Room'],
+                                                         # 'ChangedDiaper': document['fullDocument']['Changed Diaper'],
+                                                         # 'passedTime': passedTime,
+                                                         # 'batteryStatus': batteryStatus,
+
 # with mycol.watch() as stream: ## sending notification tried this code.
 #     for change in stream:
 #         # Trigger Pusher event for each change
