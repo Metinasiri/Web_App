@@ -5,10 +5,11 @@ import logging
 app = Flask(__name__)
 
 myclient = pymongo.MongoClient(
-    "mongodb+srv://piryadevi:pakistan123@smartdiaper.uvlojw5.mongodb.net/?retryWrites=true"
+    "mongodb+srv://<mongoDBUserName>:<MongoDbPWD>@smartdiaper.uvlojw5.mongodb.net/?retryWrites=true"
     "&w=majority")
 mydb = myclient["smartdiaper"]
-mycol = mydb["patient_data"]
+# mycol = mydb["patient_data"]
+mycol = mydb["info_patient"]
 
 
 def insert_data(data):
@@ -19,76 +20,51 @@ def insert_data(data):
 logging = logging.getLogger('smart-diaper')
 
 
-@app.route('/register', methods=['GET', 'POST'])
-def register_patient():
+@app.route('/result', methods=['GET', 'POST'])
+def result():
     print('HEllo there')
     if request.method == "POST":
         print('i am in POST')
-        data = {'patient_name': request.form["patient_name"],
-                'patient_room': request.form["Room"],
-                'deviceId': request.form["deviceId"],
-                'admission_date': request.form['admission_date']
-                }
-        try:
-            print('Inserting')
-            insert_patient_data = mycol.insert_one(data)
-            print('data', insert_patient_data)
-        except Exception as e:
-            print(f"Error inserting data: {e}")
-            return "Error inserting data"
-        # print(insert_patient_data)
-        # return(f'<h1>{data}</h1>')
-        return render_template('index.html', data=data)
+        data_patient = {'patient_name': request.form["patient_name"],
+                        'patient_room': request.form["Room"],
+                        'deviceId': request.form["deviceId"],
+                        'admission_date': request.form['admission_date']
+                        }
+
+        print('Inserting')
+        print(data_patient)
+        insert_data(data_patient)
+        # return data_patient
+        render_template('index.html', data=data_patient)
     elif request.method == "GET":
-        print('get')
         return 'GET method is not supported'
 
-    # return 'ok.'
+    return data_patient
 
 
-#     patient_name = request.form["patient_name"]
-#     print(patient_name)
-#     room = request.form["Room"]
-#     device_id = request.form["deviceId"]
-#     admission_date = request.form["admission_date"]
-#     return render_template('index.html', patient_name=room)
-# patient_name = request.form["patient_name"]
-# #print(request.args)
-# for j in request.data:
-#    print(j['patient_name'], 'kkkkk')
-# print(type(request.form), 'request method........................')
-# if request.method == "GET":
-#     print('Yes, the form was submitted')
-# patient_name = request.form["patient_name"]
-# patient_room = request.form["Room"]
-# deviceId = request.form["deviceId"]
-# admission_date = request.form['admission_date']
-# print(patient_name, patient_room, deviceId, admission_date)
-# patient_info = {'patient_name': patient_name}
-# , 'Room': patient_room, 'deviceId': deviceId, 'admission_date': admission_date}
-# print(patient_info)
-# mycol.insert_one(patient_info)
-# return 'ok'
-# return render_template('index.html', data=patient_info)
-# else:
-#    print('No, the form was not submitted')
-#    return 'No'
-
-
-# @app.route('/update_data')
-def update_data(id):
+def update_data(mac_address):
     # newvalues = {"$set": {'quantity': 25}}
     # Updating filter as per your needs.
-    filter = {'_id': id}
-    new_values = {"$set": {'Name': 'Sheena', 'Volume': 350, 'Room': 15}}
-    update_data_info = mycol.update_one(filter, new_values)
-    print(update_data_info)
+    filter = {'MACAddress': mac_address}
+    # new_values = {"$set": {'Name': 'Jukka', 'Volume': 350, 'Room': 14}}
+    new_values = {"$set": {'Volume': 475}}
+    try:
+        update_data_info = mycol.update_one(filter, new_values)
+        if update_data_info.matched_count > 0:
+            print("Document updated successfully.")
+        else:
+            print("No document found with the provided mac_address.")
+    except Exception as e:
+        print("An error occurred while updating the document:", str(e))
+        print(update_data_info)
 
 
-update_data(548)
+macAddress = "F4:12:FA:86:6E:50"
+# update_data(macAddress)
 
-data = {"_id": 540, "Name": "jung", "Room": "63", "Volume": 459}
-#insert_data(data)
+# data = {"_id": 540, "Name": "jung", "Room": "63", "Volume": 459}
+data = {"MACAddress": "F4:12:FA:86:6E:50", "BatteryStatus": "3.051794767", "Voltage": 1.8}
+insert_data(data)
 
 if __name__ == "__main__":
     app.run(debug=False)
