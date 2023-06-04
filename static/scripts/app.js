@@ -10,24 +10,31 @@ $(document).ready(function() {
     var alertClass = data.class;
     var patientName = data.Name;
     var urineVolume = data.Volume;
+    var percentageVolume = data.percentage_volume
     var room = data.Room
 //    var changedDiaper = data.ChangedDiaper
 //    var batteryStatus = data.batteryStatus
 //    var passedTime = data.passedTime
     var message = data.message;
+    var mac_address = data.mac_address
+    console.log(mac_address, 'i am joking')
 //    var columnClass = data.column;
     console.log(message + 'Message');
     console.log(patientName + 'PatientName')
 	var existingElement = $('.diaper-alert-column .' + id);
+	//var existingElement = $('.diaper-alert-column .' + mac_address);
+	console.log(existingElement,'mac_address')
     if (existingElement.length > 0) {
-      //console.log(id + ' Updating existing element for patient ' + id);
-      existingElement.find('.diaper-message').html(
+        console.log(existingElement.find('.diaper-message'))
+        console.log(id + ' Updating existing element for patient ' + id);
+        existingElement.find('.diaper-message').html(
         //'Patient ID: ' + id + '<br />' +
         '<p>' + 'Patient Name: ' + patientName + '<br />' +
         'Room: ' + room + '<br/>' +
         'Alert message: ' + message +'<br />' +
         //'Percentage: ' + urineVolume + '%' + '<br/>' + '</p>'
-        'Volume: ' +  urineVolume + 'ml' + '<br/>' + '</p>'
+        'Volume: ' +  urineVolume + 'ml' + '<br/>' +
+        'Percentage of Volume: ' + percentageVolume +'<br />' + '</p>'
         //'Passed Time: ' + passedTime + '%' + '<br/>' +
         //'Battery status: ' + batteryStatus + '%' + '<br/>' +
         //'Changed Diaper: ' + changedDiaper +  'min' + '</p>'
@@ -47,17 +54,19 @@ $(document).ready(function() {
         existingElement.detach().appendTo('.diaper-alert-column.red');
       }
     } else {
-      console.log('Creating new element for ID ' + id);
+      console.log('Creating new element for ID ' + mac_address);
       if (urineVolume > 400) {
         console.log('Adding to emergency column');
         $('.diaper-alert-column.red').append(
           '<div class="diaper-alert ' + alertClass + ' ' + id + '">' +
+          //'<div class="diaper-alert ' + alertClass + ' ' + mac_address + '">' +
           //'<p class="diaper-message"> Patient ID: ' + id + '<br />' +
           '<p class="diaper-message"> Patient Name: ' + patientName  + '<br />' +
           'Room: ' + room + '<br/>' +
           'Alert message: ' + message +'<br />' +
-          //'Percentage: ' + urineVolume + '%' + '<br/>' +
-          'Volume: ' +  urineVolume + 'ml' + ' <br/>' + '</p>' +
+
+          'Volume: ' +  urineVolume + 'ml' + ' <br/>' +
+          'Percentage of Volume: ' + percentageVolume +'<br />' + '</p>' +
           //'Passed Time: ' + passedTime + '%' + '<br/>' +
           //'Battery status: ' + batteryStatus + '%' + '<br/>' +
           //'Changed Diaper: ' + changedDiaper +  'min' + '</p>' +
@@ -67,12 +76,15 @@ $(document).ready(function() {
           console.log('Adding to soon column');
           $('.diaper-alert-column.yellow').append(
           '<div class="diaper-alert ' + alertClass + ' ' + id + '">' +
+          //'<div class="diaper-alert ' + alertClass + ' ' + mac_address + '">' +
           //'<p class="diaper-message"> Patient ID: ' + id + '<br />' +
           '<p class="diaper-message"> Patient Name: ' + patientName  + '<br />' +
           'Room: ' + room + '<br/>' +
           'Alert message: ' + message +'<br />' +
+
           //'Percentage: ' + urineVolume + '%' + '<br/>' +
-          'Volume: ' +  urineVolume + 'ml' + ' <br/>' + '</p>' +
+          'Volume: ' +  urineVolume + 'ml' + ' <br/>' +
+          'Percentage of Volume: ' + percentageVolume +'<br />' + '</p>' +
           //'Passed Time: ' + passedTime + '%' + '<br/>' +
           //'Battery status: ' + batteryStatus + '%' + '<br/>' +
           //'Changed Diaper: ' + changedDiaper +  'min' + '</p>' +
@@ -83,12 +95,15 @@ $(document).ready(function() {
         console.log('Adding to well-being column');
         $('.diaper-alert-column.green').append(
         '<div class="diaper-alert ' + alertClass + ' ' + id + '">' +
+        //'<div class="diaper-alert ' + alertClass + ' ' + mac_address + '">' +
         //'<p class="diaper-message"> Patient ID: ' + id + '<br />' +
         '<p class="diaper-message"> Patient Name: ' + patientName  + '<br />' +
         'Room: ' + room + '<br/>' +
         'Alert message: ' + message +'<br />' +
+
         //'Percentage: ' + urineVolume + '%' + '<br/>' +
         'Volume: ' +  urineVolume + 'ml' + ' <br/>' + '</p>' +
+        'Percentage of Volume: ' + percentageVolume +'<br />' + '</p>' +
           //'Passed Time: ' + passedTime + '%' + '<br/>' +
           //'Battery status: ' + batteryStatus + '%' + '<br/>' +
           //'Changed Diaper: ' + changedDiaper +  'min' + '</p>' +

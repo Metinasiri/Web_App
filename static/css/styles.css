@@ -15,7 +15,7 @@
 .text {
   color: #000;
   font-weight: bold;
-  padding: 0 10px;
+  padding: 0 60px;
 }
 
 .red {
@@ -60,7 +60,7 @@
 }
 
 .diaper-alert {
-  padding: 10px;
+  padding: 20px;
   border-radius: 5px;
   margin-bottom: 10px;
 }
@@ -71,6 +71,7 @@
 
 .heading-alignment{
     text-align:center;
+    margin-top: 0;
 }
 
 .diaper-alert.emergency {
